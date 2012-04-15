@@ -1,0 +1,17 @@
+Simple FTP Search Engine 0.1.0
+
+Author:
+	Cypress from Sun Yatsen University.
+	<bolin.huang@gmail.com>
+
+Project home:
+	http://code.google.com/p/simple-ftp-search-engine/
+
+Description:
+	The source code will tell you everything.
+	But remember to start daemon "searchd" first and you need apache server to handle http request and run cgi script.
+	For more information,see the Chinese version.(I think the Chinese version is mush easier to understand-_-".)
+
+License:
+	GPL v3.
+
