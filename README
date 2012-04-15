@@ -1,36 +1,17 @@
-简易FTP搜索引擎 Simple FTP Search Engine 0.1.0
+Simple FTP Search Engine 0.1.0
 
-目前共有站点33个,文件总量为38万左右.
+Author:
+	Cypress from Sun Yatsen University.
+	<bolin.huang@gmail.com>
 
-背景:
-    上个学期有感于在校园网找电影的繁琐,而博济有时候又不够给力,于是想弄个ftp搜索引擎.本来是想直接修改parker的代码就可以省点功夫,然后看源码,越看越觉得不给力,而且代码相当冗长,搜出来的结果感觉更不给力了.于是就决定自己从头写一个.
+Project home:
+	http://code.google.com/p/simple-ftp-search-engine/
 
-设计:
-     其实整个设计都非常简单,没有用到数据库之类的,都是纯手写的...
-     主要分三个部分,一个是抓取部分collect.py,借用python的ftplib模块可以省不少事,可是学校网络总是不够给力,所以写到最后到处都是try.为了简单化,都用递归式的抓取,加上网络的延时,机器负荷其实不算太高.只是有些站点实在不给力,延时达到1秒左右,抓一次都得十几分钟.以后考虑多线程抓.还有一个很纠结的就是需要进行编码,把不同站点的不同编码统一起来,我选择转为GBK.
-     第二个部分是数据转换和储存store.c,抓下来的东西不是马上处理,等抓取结束之后才对数据进行编排,把文件结构按一定的格式储存成二进制文件,其实文件系统就是一棵树,树上的每个节点都是唯一的,于是把节点的信息和父节点位置记录起来,那么就可以找到该资源的唯一路径了.
-     第三个是查询和数据处理,我把它拆成C/S架构,C是search.c,通过本地接口向searchd提出查询,S部分是searchd.c主要负责查询的数据处理,把数据载入到内存中,作为守护进程运行,然后通过网络接口和search.c进行交互.这样设计主要考虑到以后可以用其他脚本来重写search.c,这样对于界面设计和其他功能扩展都比较方便.此外,经过内存的优化,目前38万个文件信息需要34M内存,平均查询时间为0.5s,大体满足一般需求.以后可以扩展为并行查询.
-    至于最核心的匹配和排序算法我没有用到分词之类的东西,主要也是考虑到简单设计为主.我用了LCS+聚合度判断,首先用LCS(Longest common subsequence最长公共字串)就可以不用分词,但显然没分词好,所以再加个简单的聚合度判断,目前还没找到合适的函数用来衡量LCS匹配的位置的离散程度,我只是简单的把相邻匹配位置差取平方和作为离散程度判断,不知道有没有数学大牛能提供更好的函数?
-    
-安装使用:
-    到src下make,然后把生成的search文件复制到apache的cgi-bin目录下就可以了.记得要先运行searchd作为守护进程,它会监听config.h下定义的那个SERV_PORT端口,search程序会给searchd发请求和接收结果.update.sh是更新和备份的shell script,加入crontab中就可以定期更新了.其他的都是附加功能,可自行处置.
+Description:
+	The source code will tell you everything.
+	But remember to start daemon "searchd" first and you need apache server to handle http request and run cgi script.
+	For more information,see the Chinese version.(I think the Chinese version is mush easier to understand-_-".)
 
-仍然存在的问题:
-     用不同的浏览器打开ftp链接的时候表现不一样,主要是编码问题造成的,链接中的编码是抓取时的原编码,但是不同的浏览器对于这些编码的解释不一样,造成有些能登录,有些能登录但不能下载,有些一旦目录有中文就进不了目录,很是纠结.目前而言,firefox的支持度最高,建议用firefox打开.顺便求熟悉编码的大牛有没有神马好的解决方法?
-    
-作者:
-     Cyrpess 小柏 from 中山大学信息科学院计算机科学与技术  <bolin.huang@gmail.com>
-
-版权:
-     本软件以GPL v3协议发布.可以随意修改,但是记得要遵守GPL中相关规定.做人要厚道~.~
-
-更新:
-    2011.02.13 第一次完工,完成总体结构
-    2011.02.20 将查询部分拆分成C/S架构,方便以后界面设计
-    2011.02.21 将数据载入内存,减少文件读取
-    2011.02.25 使用动态内存,减少内存使用
-    2011.03.1  优化了匹配算法
-    2011.03.9  修改了lcs的范围bug,之前会导致内存溢出searchd崩溃
-
-
+License:
+	GPL v3.
 
